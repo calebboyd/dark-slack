@@ -10,8 +10,10 @@ const
   patch =     `
 //dark-slack-patch-start
 document.addEventListener('DOMContentLoaded', function() {
-  const fs = require('fs')
-  $("<style></style>").appendTo('head').html(fs.readFileSync("${cssPath}", 'utf-8'));
+  const fs = require('fs'),
+    cssPath = ${JSON.stringify(path.normalize(cssPath))},
+    css = fs.readFileSync(cssPath, 'utf-8')
+  $("<style></style>").appendTo('head').html(css)
 });
 //dark-slack-patch-end`,
   //Themes and updating
