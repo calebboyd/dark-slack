@@ -1,7 +1,21 @@
 #!/usr/bin/env node
+
 const 
   path = require('path'),
   fs = require('fs'),
+  requestsCustomCss = process.argv.findIndex(x => x === '--add-css') + 1
+
+let customCss = ''
+if (requestsCustomCss) {
+  const filename = process.argv[requestsCustomCss]
+  try {
+    customCss = fs.readFileSync(path.normalize(filename), 'utf-8')
+  } catch(e) {
+    console.log('Failed to read custom css from: ' + filename)
+  }
+}
+
+const
   isWin = process.platform === 'win32' ? true : false,
   isMac = process.platform === 'darwin',
   resourcePaths = [],
@@ -13,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const fs = require('fs'),
     cssPath = ${JSON.stringify(path.normalize(cssPath))},
     css = fs.readFileSync(cssPath, 'utf-8')
-  $("<style></style>").appendTo('head').html(css)
+  $("<style></style>").appendTo('head').html(css + ${customCss ? JSON.stringify(customCss): "''"})
 });
 //dark-slack-patch-end`,
   //Themes and updating
@@ -55,8 +69,9 @@ document.addEventListener('DOMContentLoaded', function() {
   help = `Usage: dark-slack [theme=b] [options]
 
   Options:
-    -i --install    fetch the latest css from laCour/slack-night-mode 
-                       NOTE: please be weary of installing remote CSS
+    -i --install    Fetch and install the latest css from laCour/slack-night-mode 
+                      NOTE: please be weary of installing remote CSS
+    --add-css       Append additional css from a local file to the patch
 
   Themes (alias   name):
     o    original

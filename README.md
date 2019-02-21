@@ -10,8 +10,9 @@ Install and update the [nicest dark slack theme](https://github.com/laCour/slack
 Usage: dark-slack [theme=b] [options]
 
   Options:
-    --update    fetch the latest css from laCour/slack-night-mode 
-                   NOTE: please be weary of installing remote CSS
+    -i --install    Fetch and install the latest css from laCour/slack-night-mode 
+                      NOTE: please be weary of installing remote CSS
+    --add-css       Append additional css from a local file to the patch
 
   Themes (alias   name):
     o    original
