@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const 
+const
   path = require('path'),
   fs = require('fs'),
   requestsCustomCss = process.argv.findIndex(x => x === '--add-css') + 1
@@ -18,6 +18,8 @@ if (requestsCustomCss) {
 const
   isWin = process.platform === 'win32' ? true : false,
   isMac = process.platform === 'darwin',
+  isLinux = process.platform === 'linux'
+
   resourcePaths = [],
   patchedPaths = [],
   cssPath = path.join(__dirname, './installed.css'),
@@ -69,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
   help = `Usage: dark-slack [theme=b] [options]
 
   Options:
-    -i --install    Fetch and install the latest css from laCour/slack-night-mode 
+    -i --install    Fetch and install the latest css from laCour/slack-night-mode
                       NOTE: please be weary of installing remote CSS
     --add-css       Append additional css from a local file to the patch
 
@@ -99,6 +101,8 @@ if (isWin) {
   }))
 } else if (isMac) {
   resourcePaths.push('/Applications/Slack.app/Contents/Resources/app.asar.unpacked/src/static/ssb-interop.js')
+} else if (isLinux) {
+  resourcePaths.push('/usr/lib/slack/resources/app.asar.unpacked/src/static/ssb-interop.js')
 }
 
 resourcePaths.forEach(x => {
@@ -111,7 +115,7 @@ resourcePaths.forEach(x => {
   }
   if (color === 'og' && matches) {
     let lastIndex = 0
-    matches.forEach((x, i) => {      
+    matches.forEach((x, i) => {
       const index = contents.indexOf(x)
       const isEnd = Boolean(i % 2)
       if (isEnd) {
@@ -121,7 +125,7 @@ resourcePaths.forEach(x => {
     })
     fs.writeFileSync(x, contents)
   }
-}) 
+})
 
 if (!patchedPaths.length) {
   if (color === 'og') {
@@ -133,7 +137,7 @@ if (!patchedPaths.length) {
   console.log('Patched: ' + cssPath + '\nto: ' + JSON.stringify(patchedPaths, null, 2))
 }
 
-const updateUrl = 'https://raw.githubusercontent.com/laCour/slack-night-mode/master/css/raw/' + color
+const updateUrl = 'https://raw.githubusercontent.com/brettm12345/slack-night-mode/master/css/raw/' + color
 const colorPath = cssPath + color.replace(/\//g, '-')
 let cssContents = ''
 
